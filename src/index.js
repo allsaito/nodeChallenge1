@@ -76,9 +76,17 @@ app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
   const {id} = request.params
   const {user} = request
 
-  const todo = user.find( (user)=> user.todos.id === id )
+  const todos = user.todos
+  const todo = todos.find( (todos)=> todos.id === id )
 
-  console.log(todo)
+  if(!todo){
+    return response.status(404).json({error: "Invalid id"})
+  }
+
+  todo.title = title
+  todo.deadline = new Date(deadline)
+
+  response.status(200).json(todo)
 
 });
 
